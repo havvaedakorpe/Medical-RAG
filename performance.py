@@ -34,7 +34,7 @@ def run_performance_and_evaluation(input_csv, perf_csv):
     for item in queries:
         query = item['Query']
         reference = item['Answer']
-
+        query_length = item.get('Query_Length', 'unknown')
         # Retrieval zamanı
         start_retrieval = time.time()
         retrieved_docs = search_documents(query)
@@ -51,10 +51,10 @@ def run_performance_and_evaluation(input_csv, perf_csv):
 
         results.append({
             "Query": query,
+            "Query_Length": query_length,
             "Retrieval_Time_MS": round(retrieval_time_ms),
             "Generation_Time_MS": round(generation_time_ms),
             "Total_Time_MS": round(total_time_ms),
-            "Reference": reference
         })
         print("ok")
         predictions.append(model_output)
@@ -62,13 +62,13 @@ def run_performance_and_evaluation(input_csv, perf_csv):
 
     # Performans sonuçlarını CSV'ye yaz
     with open(perf_csv, 'w', newline='', encoding='utf-8') as f:
-        fieldnames = ["Query", "Retrieval_Time_MS", "Generation_Time_MS", "Total_Time_MS", "Model_Output", "Reference"]
+        fieldnames = ["Query", "Query_Length", "Retrieval_Time_MS", "Generation_Time_MS", "Total_Time_MS"]
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         for row in results:
             writer.writerow(row)
 
-    print(f"Performans ve çıktı sonuçları '{perf_csv}' dosyasına yazıldı.")
+    print(f"Performans results are saved. '{perf_csv}'")
 
     # Metrik hesaplama
     print("\n--- Otomatik Metrikler ---")
@@ -88,4 +88,4 @@ def run_performance_and_evaluation(input_csv, perf_csv):
     print(f"BERTScore (F1): {F1.mean().item():.4f}")
 
 if __name__ == "__main__":
-    run_performance_and_evaluation("queries.csv", "performance_and_metrics.csv")
+    run_performance_and_evaluation("data/queries_new.csv", "performance_results.csv")

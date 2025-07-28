@@ -36,7 +36,12 @@ python app_gradio.py
 
 # Docker Kullanımı
 docker build -t medical-rag .
+<<<<<<< Updated upstream
 docker run -p 8000:8000 -p 7860:7860 medical-rag
+=======
+docker run -p 7860:7860 -p 8000:8000 medical-rag
+http://localhost:7860 #Uygulamaya Erişim
+>>>>>>> Stashed changes
 
 ---
 

@@ -21,4 +21,4 @@ app = gr.Interface(
     outputs="text",
     title="Medical RAG Demo"
 )
-app.launch()
+app.launch(server_name="0.0.0.0", server_port=7860)
