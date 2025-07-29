@@ -1,11 +1,22 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Depends
 from pydantic import BaseModel
 from typing import List, Optional
+from sqlalchemy.orm import Session
 import time
 
 from rag import search_documents, generate_answer
+from database import SessionLocal, init_db, QueryLog
 
 app = FastAPI()
+init_db()
+
+#db session
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 #request data model
 class QueryRequest(BaseModel):
@@ -20,7 +31,7 @@ class QueryResponse(BaseModel):
     latency: Optional[float] = None
 
 @app.post("/query", response_model=QueryResponse) #endpoint at "/query" that receives QueryRequest and returns QueryResponse
-async def get_medical_answer(request: QueryRequest):
+async def get_medical_answer(request: QueryRequest, db: Session = Depends(get_db)):
     total_start = time.time()
     retrieval_start = time.time()
     
@@ -32,6 +43,11 @@ async def get_medical_answer(request: QueryRequest):
     generation_time = time.time() - generation_start
 
     total_time = time.time() - total_start
+    
+    #add log to the database
+    log_entry = QueryLog(query=request.query)
+    db.add(log_entry)
+    db.commit()
 
     return {
         "answer": llm_response,
