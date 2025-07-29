@@ -2,6 +2,7 @@
 
 Medical RAG, medikal alan sorularına anlamlı ve güvenilir cevaplar üretebilmek için geliştirilmiş bir Retrieval-Augmented Generation (RAG) sistemidir. Kullanıcıdan gelen tıbbi sorgular önce semantik olarak ilgili belgeler FAISS kütüphanesi kullanılarak aranır, ardından büyük dil modeli (LLM) ile doğal ve bağlama uygun yanıtlar oluşturulur.
 
+
 ---
 
 ## Özellikler
@@ -16,7 +17,7 @@ Medical RAG, medikal alan sorularına anlamlı ve güvenilir cevaplar üretebilm
 
 ---
 
-## Kurulum ve Kullanım (Yerel)
+## Kurulum ve Kullanım 
 
 ```bash
 # Sanal ortam oluştur ve aktif et
