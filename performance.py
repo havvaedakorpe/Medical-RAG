@@ -92,4 +92,4 @@ def run_performance_and_evaluation(input_csv, perf_csv):
     print(f"Perplexity: {ppl:.2f}")
 
 if __name__ == "__main__":
-    run_performance_and_evaluation("data/queries_new.csv", "performance_results..csv")
+    run_performance_and_evaluation("data/queries_new.csv", "performance_results.csv")
