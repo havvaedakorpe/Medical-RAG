@@ -16,6 +16,7 @@ Medical RAG, medikal alan sorularına anlamlı ve güvenilir cevaplar üretebilm
 - **Performans Testi:** 100 adet medikal sorgu ile test ve analiz imkanı  
 
 ---
+** ÖNEMLİ: Kullanıcı "Submit" butonuna bastığında, arayüzde işlem yapılırken "yükleniyor" animasyonunun görünmesi beklenmektedir ancak ilk sorguda bu animasyon görünmemektedir. İşlem başlamamış gibi görünse de bir süre sonra cevap ekranda görünmektedir.
 
 ## Kurulum ve Kullanım 
 
