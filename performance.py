@@ -1,6 +1,7 @@
 import csv
 import time
 import torch
+from tqdm import tqdm 
 from rag.retrieval import search_documents
 from rag.generation import generate_answer
 import evaluate
@@ -31,17 +32,17 @@ def run_performance_and_evaluation(input_csv, perf_csv):
     predictions = []
     references = []
 
-    for item in queries:
+    for item in tqdm(queries, desc="Answering Queries"): 
         query = item['Query']
         reference = item['Answer']
         query_length = item.get('Query_Length', 'unknown')
-        # Retrieval zamanı
+        # Retrieval
         start_retrieval = time.time()
         retrieved_docs = search_documents(query)
         end_retrieval = time.time()
         retrieval_time_ms = (end_retrieval - start_retrieval) * 1000
 
-        # Generation zamanı
+        # Generation
         start_generation = time.time()
         model_output = generate_answer(query, retrieved_docs)
         end_generation = time.time()
@@ -56,11 +57,10 @@ def run_performance_and_evaluation(input_csv, perf_csv):
             "Generation_Time_MS": round(generation_time_ms),
             "Total_Time_MS": round(total_time_ms),
         })
-        print("ok")
         predictions.append(model_output)
         references.append(reference)
 
-    # Performans sonuçlarını CSV'ye yaz
+    # Performans sonuçları
     with open(perf_csv, 'w', newline='', encoding='utf-8') as f:
         fieldnames = ["Query", "Query_Length", "Retrieval_Time_MS", "Generation_Time_MS", "Total_Time_MS"]
         writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -86,6 +86,10 @@ def run_performance_and_evaluation(input_csv, perf_csv):
 
     P, R, F1 = score(predictions, references, lang="en", model_type="bert-base-uncased")
     print(f"BERTScore (F1): {F1.mean().item():.4f}")
+    
+    sample_text = "Hypertension is a common chronic condition in adults."
+    ppl = calculate_perplexity(sample_text)
+    print(f"Perplexity: {ppl:.2f}")
 
 if __name__ == "__main__":
-    run_performance_and_evaluation("data/queries_new.csv", "performance_results.csv")
+    run_performance_and_evaluation("queries_new.csv", "performance_results..csv")
